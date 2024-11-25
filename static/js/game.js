@@ -192,6 +192,8 @@ class PuzzleGame {
         
         const modal = new bootstrap.Modal(document.getElementById('gameOverModal'));
         modal.show();
+    }
+
     updateProgress() {
         const placedPieces = this.pieces.filter(p => p.placed).length;
         const progress = (placedPieces / this.totalPieces) * 100;
@@ -200,7 +202,6 @@ class PuzzleGame {
             progressBar.style.width = `${progress}%`;
             progressBar.setAttribute('aria-valuenow', progress);
         }
-    }
     }
 }
 
