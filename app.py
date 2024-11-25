@@ -145,4 +145,4 @@ def analytics():
                          performance_data=performance_data)
 
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=5000, log_output=True, use_reloader=False)
+    app.run(host='0.0.0.0', port=5000)

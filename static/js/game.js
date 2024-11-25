@@ -1,6 +1,5 @@
 class PuzzleGame {
-// Initialize Socket.IO connection
-const socket = io();
+
     constructor() {
         this.canvas = document.getElementById('puzzleCanvas');
         this.ctx = this.canvas.getContext('2d');
