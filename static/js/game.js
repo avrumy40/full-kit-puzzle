@@ -86,22 +86,25 @@ class PuzzleGame {
     initializeCanvas() {
         this.canvas.width = this.canvas.offsetWidth;
         this.canvas.height = this.canvas.offsetHeight;
-        this.pieceWidth = this.canvas.width / 4;
-        this.pieceHeight = this.canvas.height / 4;
+        this.pieceWidth = (this.canvas.width/2) / 4;  // Frame is half the canvas width
+        this.pieceHeight = (this.canvas.height/2) / 4; // Frame is half the canvas height
         
         // Create puzzle pieces
         for(let row = 0; row < 4; row++) {
             for(let col = 0; col < 4; col++) {
+                // Position pieces on the right side of the frame
+                const startX = this.canvas.width/2 + 20 + (col % 2) * this.pieceWidth;
+                const startY = 20 + row * this.pieceHeight;
+                
                 this.pieces.push({
-                    x: this.canvas.width - this.pieceWidth - 10,
-                    y: 10,
+                    x: startX,
+                    y: startY,
                     correctX: col * this.pieceWidth,
                     correctY: row * this.pieceHeight,
                     width: this.pieceWidth,
                     height: this.pieceHeight,
                     available: false,
                     placed: false,
-                    // Add edge type information
                     topEdge: this.getEdgeType(row, col, 'top'),
                     rightEdge: this.getEdgeType(row, col, 'right'),
                     bottomEdge: this.getEdgeType(row, col, 'bottom'),
@@ -214,9 +217,29 @@ class PuzzleGame {
     update() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Draw puzzle grid outlines
-        this.ctx.strokeStyle = '#666';
-        this.ctx.strokeRect(0, 0, this.canvas.width, this.canvas.height);
+        // Draw puzzle frame
+        this.ctx.lineWidth = 3;
+        this.ctx.strokeStyle = '#888';
+        this.ctx.strokeRect(0, 0, this.canvas.width/2, this.canvas.height/2);
+        
+        // Draw grid lines
+        this.ctx.lineWidth = 1;
+        for(let i = 1; i < 4; i++) {
+            // Vertical lines
+            this.ctx.beginPath();
+            this.ctx.moveTo((this.canvas.width/2/4) * i, 0);
+            this.ctx.lineTo((this.canvas.width/2/4) * i, this.canvas.height/2);
+            this.ctx.stroke();
+            
+            // Horizontal lines
+            this.ctx.beginPath();
+            this.ctx.moveTo(0, (this.canvas.height/2/4) * i);
+            this.ctx.lineTo(this.canvas.width/2, (this.canvas.height/2/4) * i);
+            this.ctx.stroke();
+        }
+        
+        // Reset line width for pieces
+        this.ctx.lineWidth = 1;
         
         // Draw pieces
         for(let piece of this.pieces) {
