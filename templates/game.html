@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid py-3">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="game-container">
+                <canvas id="puzzleCanvas" class="puzzle-canvas"></canvas>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Game Stats</h5>
+                    <div class="mb-3">
+                        <label>Time Remaining:</label>
+                        <div id="timer" class="h4">5:00</div>
+                    </div>
+                    <div class="mb-3">
+                        <label>Next Batch:</label>
+                        <div class="progress">
+                            <div id="batchProgress" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label>Moves Made:</label>
+                        <div id="moves" class="h4">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Game Over Modal -->
+<div class="modal fade" id="gameOverModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Game Complete!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="gameStats"></div>
+                <div class="mt-3">
+                    <h6>Full-Kit Principle:</h6>
+                    <p id="fullKitMessage"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="location.reload()">Play Again</button>
+                <a href="/" class="btn btn-primary">Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/audio.js"></script>
+<script src="/static/js/game.js"></script>
+{% endblock %}

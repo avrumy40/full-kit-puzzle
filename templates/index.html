@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="mb-4">Full-Kit Puzzle Challenge</h1>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Welcome to the Theory of Constraints Game</h5>
+                    <p class="card-text">
+                        Experience the importance of having all necessary components before starting a task.
+                        Will you start assembling the puzzle immediately or wait for all pieces?
+                    </p>
+                    <div class="mb-4">
+                        <h6>How to Play:</h6>
+                        <ul class="list-unstyled">
+                            <li>• Puzzle pieces will be released in batches</li>
+                            <li>• Drag and drop pieces to assemble the puzzle</li>
+                            <li>• Complete the puzzle within the time limit</li>
+                            <li>• Learn about the Full-kit principle</li>
+                        </ul>
+                    </div>
+                    <a href="/game" class="btn btn-primary">Start Game</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
