@@ -52,6 +52,7 @@
                     <script>
                         const socket = io();
                         let currentRoom = null;
+                        const waitingRoomModal = new bootstrap.Modal(document.getElementById('waitingRoomModal'));
                         
                         function createGame() {
                             socket.emit('create_game');
@@ -72,7 +73,7 @@
                         socket.on('game_created', (data) => {
                             currentRoom = data.room_id;
                             document.getElementById('roomIdDisplay').textContent = currentRoom;
-                            new bootstrap.Modal(document.getElementById('waitingRoomModal')).show();
+                            waitingRoomModal.show();
                         });
                         
                         socket.on('player_joined', (data) => {
@@ -85,6 +86,14 @@
                         
                         socket.on('game_start', () => {
                             window.location.href = '/game';
+                        });
+
+                        socket.on('connect_error', (error) => {
+                            console.error('Connection Error:', error);
+                        });
+
+                        socket.on('error', (error) => {
+                            console.error('Socket Error:', error);
                         });
                     </script>
                 </div>
