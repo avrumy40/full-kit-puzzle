@@ -11,7 +11,7 @@ class PuzzleGame {
         this.draggedPiece = null;
         this.batches = [0.3, 0.3, 0.4]; // 30%, 30%, 40% of pieces
         this.currentBatch = 0;
-        this.knobSize = 20; // Size of the jigsaw knobs
+        this.knobSize = 15; // Smaller, more standard size
         this.selectedFrame = null;
         this.frameImage = new Image();
         
@@ -57,27 +57,35 @@ class PuzzleGame {
         
         if (width !== 0) { // Horizontal edge
             const midPoint = x + width / 2;
-            const ctrl1 = midPoint - kSize;
-            const ctrl2 = midPoint + kSize;
             
             if (hasKnob) {
-                this.ctx.quadraticCurveTo(ctrl1, y, midPoint, y + (height > 0 ? -kSize : kSize));
-                this.ctx.quadraticCurveTo(ctrl2, y, x + width, y);
+                // Simple knob
+                this.ctx.lineTo(midPoint - kSize, y);
+                this.ctx.lineTo(midPoint, y + (height > 0 ? -kSize : kSize));
+                this.ctx.lineTo(midPoint + kSize, y);
+                this.ctx.lineTo(x + width, y);
             } else {
-                this.ctx.quadraticCurveTo(ctrl1, y, midPoint, y + (height > 0 ? kSize : -kSize));
-                this.ctx.quadraticCurveTo(ctrl2, y, x + width, y);
+                // Simple indent
+                this.ctx.lineTo(midPoint - kSize, y);
+                this.ctx.lineTo(midPoint, y + (height > 0 ? kSize : -kSize));
+                this.ctx.lineTo(midPoint + kSize, y);
+                this.ctx.lineTo(x + width, y);
             }
         } else { // Vertical edge
             const midPoint = y + height / 2;
-            const ctrl1 = midPoint - kSize;
-            const ctrl2 = midPoint + kSize;
             
             if (hasKnob) {
-                this.ctx.quadraticCurveTo(x, ctrl1, x + (width > 0 ? -kSize : kSize), midPoint);
-                this.ctx.quadraticCurveTo(x, ctrl2, x, y + height);
+                // Simple knob
+                this.ctx.lineTo(x, midPoint - kSize);
+                this.ctx.lineTo(x + (width > 0 ? -kSize : kSize), midPoint);
+                this.ctx.lineTo(x, midPoint + kSize);
+                this.ctx.lineTo(x, y + height);
             } else {
-                this.ctx.quadraticCurveTo(x, ctrl1, x + (width > 0 ? kSize : -kSize), midPoint);
-                this.ctx.quadraticCurveTo(x, ctrl2, x, y + height);
+                // Simple indent
+                this.ctx.lineTo(x, midPoint - kSize);
+                this.ctx.lineTo(x + (width > 0 ? kSize : -kSize), midPoint);
+                this.ctx.lineTo(x, midPoint + kSize);
+                this.ctx.lineTo(x, y + height);
             }
         }
     }
