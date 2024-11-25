@@ -1,0 +1,72 @@
+Objective:
+Create a simple web-based puzzle game that illustrates the Theory of Constraints (TOC) concept of "Full-kit" by showing the importance of having all necessary components before starting a task.
+
+User Flow:
+1. Welcome Screen:
+    * The game begins with a welcome screen featuring the game title and a brief introduction.
+    * A short message explains the game's goal: to assemble a puzzle efficiently.
+    * An optional link or button provides more information about the Full-kit concept.
+    * The user clicks "Start" to proceed.
+2. Puzzle Selection
+    * the game can auto-select a default puzzle for simplicity.
+3. Instructions Screen:
+    * A concise instruction page informs the user that puzzle pieces will appear in batches.
+    * It highlights that starting assembly without all pieces might lead to inefficiencies.
+    * The user is advised to decide whether to start immediately or wait for all pieces.
+    * The user clicks "Continue" to begin the game.
+4. Gameplay Start:
+    * The puzzle workspace appears with an empty puzzle frame.
+    * A timer starts counting down, indicating the total time allotted (e.g., 5 minutes).
+    * The first batch of puzzle pieces (e.g., 30% of total pieces) is available for assembly.
+5. Piece Release Mechanism:
+    * Puzzle pieces are released in multiple batches at set intervals (e.g., every 30 seconds).
+    * A progress bar or countdown shows when the next batch will arrive.
+    * Each batch adds more pieces until all are available.
+6. User Interaction:
+    * Users can drag and drop available pieces into the puzzle frame at any time.
+    * Pieces snap into place when correctly positioned.
+    * If users place pieces early, they might need to adjust them when new pieces arrive.
+    * Users can rearrange pieces as needed but with time implications.
+7. Challenges Demonstrating Full-kit:
+    * Early assembly without all pieces may lead to misplaced pieces or the need for rework.
+    * Users experience delays caused by adjusting the puzzle with each new batch.
+    * Waiting for all pieces before starting allows for smoother and quicker assembly.
+8. Visual and Audio Feedback:
+    * Sound effects or visual cues indicate the arrival of new batches.
+    * Notifications remind the user of the remaining time and pieces.
+9. Completion:
+    * The game ends when the puzzle is fully assembled or the timer runs out.
+    * A summary screen displays the user's performance metrics:
+        * Total time taken to complete the puzzle.
+        * Number of times pieces were moved or adjusted.
+        * Efficiency rating based on their strategy.
+10. Feedback and Reflection:
+    * A message explains how the user's choices affected their efficiency.
+    * It connects the gameplay experience to the Full-kit concept:
+        * Starting without all pieces led to rework and delays.
+        * Waiting for all pieces could have resulted in faster completion.
+    * Encourages users to consider how this applies to real-world tasks.
+11. Replay Option:
+    * Users can choose to replay the game to try a different strategy.
+    * This allows them to directly compare the outcomes of different approaches.
+12. Exit or Share:
+    * Option to exit the game or share their results on social media (optional).
+    * Provides links or resources for learning more about TOC and Full-kit.
+
+Design Considerations:
+* Simplicity:
+    * The interface is clean and intuitive, focusing on user engagement.
+    * Controls are straightforward: click, drag, and drop.
+* Timing:
+    * Batch intervals and total game time are balanced to create meaningful choices without causing frustration.
+    * The timing mechanism is transparent, so users are aware of when new pieces will arrive.
+* Accessibility:
+    * The game is web-based and runs smoothly on common browsers.
+    * It's compatible with both desktop and mobile devices.
+* Engagement:
+    * Visuals are appealing but not distracting.
+    * Sound effects and animations enhance the experience without overwhelming the user.
+* Educational Emphasis:
+    * The game subtly reinforces the Full-kit principle without overtly lecturing.
+    * Reflection prompts encourage users to think critically about their in-game decisions.
+ 
