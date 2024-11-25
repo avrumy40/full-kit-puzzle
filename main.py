@@ -1,4 +1,6 @@
-from app import app
+import eventlet
+import eventlet.wsgi
+from app import app, socketio
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    eventlet.wsgi.server(eventlet.listen(('0.0.0.0', 5000)), app)
