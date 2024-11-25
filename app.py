@@ -12,6 +12,11 @@ socketio = SocketIO(app, async_mode='eventlet')
 # Store active game rooms
 game_rooms = {}
 
+@app.before_request
+def before_request():
+    if 'player_id' not in session:
+        session['player_id'] = str(uuid.uuid4())
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -69,7 +74,7 @@ def handle_progress_update(data):
         emit('progress_update', {
             'player_id': session['player_id'],
             'progress': progress
-        }, room=room_id)
+        }, to=room_id, broadcast=True)
 
 @socketio.on('disconnect')
 def handle_disconnect():
@@ -82,4 +87,4 @@ def handle_disconnect():
                 emit('player_left', {'player_count': len(game_rooms[room_id]['players'])}, to=room_id, broadcast=True)
 
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=5000, log_output=True)
+    socketio.run(app, host='0.0.0.0', port=5000, log_output=True, use_reloader=False)
