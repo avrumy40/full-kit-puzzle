@@ -12,11 +12,32 @@ class PuzzleGame {
         this.batches = [0.3, 0.3, 0.4]; // 30%, 30%, 40% of pieces
         this.currentBatch = 0;
         this.knobSize = 20; // Size of the jigsaw knobs
+        this.selectedFrame = null;
+        this.frameImage = new Image();
         
-        this.initializeCanvas();
-        this.setupEventListeners();
-        this.startGame();
+        this.setupFrameSelection();
     }
+
+    setupFrameSelection() {
+        const buttons = document.querySelectorAll('.frame-select');
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                buttons.forEach(b => b.classList.remove('active'));
+                button.classList.add('active');
+                this.selectedFrame = button.dataset.frame;
+                this.loadFrame();
+            });
+        });
+    }
+
+    loadFrame() {
+        this.frameImage.onload = () => {
+            this.pieces = [];
+            this.initializeCanvas();
+            this.setupEventListeners();
+            this.startGame();
+        };
+        this.frameImage.src = `/static/images/${this.selectedFrame}.svg`;
 
     // Helper method to determine if an edge should have a knob or indent
     getEdgeType(row, col, edge) {
@@ -218,24 +239,29 @@ class PuzzleGame {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
         // Draw puzzle frame
-        this.ctx.lineWidth = 3;
-        this.ctx.strokeStyle = '#888';
-        this.ctx.strokeRect(0, 0, this.canvas.width/2, this.canvas.height/2);
-        
-        // Draw grid lines
-        this.ctx.lineWidth = 1;
-        for(let i = 1; i < 4; i++) {
-            // Vertical lines
-            this.ctx.beginPath();
-            this.ctx.moveTo((this.canvas.width/2/4) * i, 0);
-            this.ctx.lineTo((this.canvas.width/2/4) * i, this.canvas.height/2);
-            this.ctx.stroke();
+        if (this.selectedFrame) {
+            this.ctx.lineWidth = 3;
+            this.ctx.strokeStyle = '#888';
+            this.ctx.strokeRect(0, 0, this.canvas.width/2, this.canvas.height/2);
             
-            // Horizontal lines
-            this.ctx.beginPath();
-            this.ctx.moveTo(0, (this.canvas.height/2/4) * i);
-            this.ctx.lineTo(this.canvas.width/2, (this.canvas.height/2/4) * i);
-            this.ctx.stroke();
+            // Draw the selected frame image
+            this.ctx.drawImage(this.frameImage, 0, 0, this.canvas.width/2, this.canvas.height/2);
+            
+            // Draw grid lines
+            this.ctx.lineWidth = 1;
+            for(let i = 1; i < 4; i++) {
+                // Vertical lines
+                this.ctx.beginPath();
+                this.ctx.moveTo((this.canvas.width/2/4) * i, 0);
+                this.ctx.lineTo((this.canvas.width/2/4) * i, this.canvas.height/2);
+                this.ctx.stroke();
+                
+                // Horizontal lines
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, (this.canvas.height/2/4) * i);
+                this.ctx.lineTo(this.canvas.width/2, (this.canvas.height/2/4) * i);
+                this.ctx.stroke();
+            }
         }
         
         // Reset line width for pieces

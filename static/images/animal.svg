@@ -1,0 +1,25 @@
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Cat outline -->
+  <path d="M200 100 L120 40 L80 100 L120 80 L200 100 L280 80 L320 100 L280 40 Z" fill="none" stroke="#666" stroke-width="2"/>
+  <!-- Face -->
+  <circle cx="200" cy="200" r="100" fill="none" stroke="#666" stroke-width="2"/>
+  <!-- Eyes -->
+  <ellipse cx="160" cy="180" rx="15" ry="20" fill="none" stroke="#666" stroke-width="2"/>
+  <ellipse cx="240" cy="180" rx="15" ry="20" fill="none" stroke="#666" stroke-width="2"/>
+  <!-- Nose -->
+  <path d="M190 200 L210 200 L200 210 Z" fill="none" stroke="#666" stroke-width="2"/>
+  <!-- Whiskers -->
+  <line x1="140" y1="200" x2="80" y2="180" stroke="#666" stroke-width="1"/>
+  <line x1="140" y1="210" x2="80" y2="210" stroke="#666" stroke-width="1"/>
+  <line x1="140" y1="220" x2="80" y2="240" stroke="#666" stroke-width="1"/>
+  <line x1="260" y1="200" x2="320" y2="180" stroke="#666" stroke-width="1"/>
+  <line x1="260" y1="210" x2="320" y2="210" stroke="#666" stroke-width="1"/>
+  <line x1="260" y1="220" x2="320" y2="240" stroke="#666" stroke-width="1"/>
+  <!-- Grid lines for puzzle pieces -->
+  <line x1="100" y1="0" x2="100" y2="400" stroke="#666" stroke-width="1"/>
+  <line x1="200" y1="0" x2="200" y2="400" stroke="#666" stroke-width="1"/>
+  <line x1="300" y1="0" x2="300" y2="400" stroke="#666" stroke-width="1"/>
+  <line x1="0" y1="100" x2="400" y2="100" stroke="#666" stroke-width="1"/>
+  <line x1="0" y1="200" x2="400" y2="200" stroke="#666" stroke-width="1"/>
+  <line x1="0" y1="300" x2="400" y2="300" stroke="#666" stroke-width="1"/>
+</svg>
