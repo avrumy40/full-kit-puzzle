@@ -83,39 +83,53 @@ class PuzzleGame {
     }
 
     drawPiece(piece) {
+        this.ctx.save();
         this.ctx.beginPath();
+        
+        // Create piece path with jigsaw edges
         this.ctx.moveTo(piece.x, piece.y);
-        
-        // Draw top edge
         this.drawPieceEdge(piece.x, piece.y, piece.width, 0, piece.topEdge);
-        
-        // Draw right edge
         this.drawPieceEdge(piece.x + piece.width, piece.y, 0, piece.height, piece.rightEdge);
-        
-        // Draw bottom edge
         this.drawPieceEdge(piece.x + piece.width, piece.y + piece.height, -piece.width, 0, piece.bottomEdge);
-        
-        // Draw left edge
         this.drawPieceEdge(piece.x, piece.y + piece.height, 0, -piece.height, piece.leftEdge);
         
         this.ctx.closePath();
-        this.ctx.fillStyle = piece.placed ? '#4CAF50' : '#2196F3';
-        this.ctx.fill();
+        this.ctx.clip();
+        
+        // Draw the corresponding portion of the frame image
+        if (this.frameImage) {
+            const frameWidth = this.canvas.width/2;
+            const frameHeight = this.canvas.height/2;
+            this.ctx.drawImage(
+                this.frameImage,
+                piece.correctX, piece.correctY,  // Source position
+                piece.width, piece.height,       // Source dimensions
+                piece.x, piece.y,               // Destination position
+                piece.width, piece.height       // Destination dimensions
+            );
+        }
+        
+        // Draw piece border
         this.ctx.strokeStyle = '#666';
+        this.ctx.lineWidth = 2;
         this.ctx.stroke();
+        
+        this.ctx.restore();
     }
 
     initializeCanvas() {
         this.canvas.width = this.canvas.offsetWidth;
         this.canvas.height = this.canvas.offsetHeight;
-        this.pieceWidth = (this.canvas.width/2) / 4;  // Frame is half the canvas width
-        this.pieceHeight = (this.canvas.height/2) / 4; // Frame is half the canvas height
+        
+        const frameWidth = this.canvas.width/2;
+        const frameHeight = this.canvas.height/2;
+        this.pieceWidth = frameWidth / 4;
+        this.pieceHeight = frameHeight / 4;
         
         // Create puzzle pieces
         for(let row = 0; row < 4; row++) {
             for(let col = 0; col < 4; col++) {
-                // Position pieces on the right side of the frame
-                const startX = this.canvas.width/2 + 20 + (col % 2) * this.pieceWidth;
+                const startX = frameWidth + 20 + (col % 2) * this.pieceWidth;
                 const startY = 20 + row * this.pieceHeight;
                 
                 this.pieces.push({
