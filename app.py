@@ -1,11 +1,13 @@
 import os
+import eventlet
+eventlet.monkey_patch()
 from flask import Flask, render_template, request, session
 from flask_socketio import SocketIO, emit, join_room, leave_room
 import uuid
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY") or "dev_key_123"
-socketio = SocketIO(app)
+socketio = SocketIO(app, async_mode='eventlet')
 
 # Store active game rooms
 game_rooms = {}
@@ -44,7 +46,7 @@ def handle_join_game(data):
             'ready': False,
             'progress': 0
         }
-        emit('player_joined', {'player_count': len(game_rooms[room_id]['players'])}, room=room_id)
+        emit('player_joined', {'player_count': len(game_rooms[room_id]['players'])}, to=room_id, broadcast=True)
     else:
         emit('join_error', {'message': 'Game not found or already started'})
 
@@ -56,7 +58,7 @@ def handle_player_ready(data):
         all_ready = all(player['ready'] for player in game_rooms[room_id]['players'].values())
         if all_ready and len(game_rooms[room_id]['players']) >= 2:
             game_rooms[room_id]['started'] = True
-            emit('game_start', room=room_id)
+            emit('game_start', to=room_id, broadcast=True)
 
 @socketio.on('update_progress')
 def handle_progress_update(data):
@@ -77,7 +79,7 @@ def handle_disconnect():
             if len(game_rooms[room_id]['players']) == 0:
                 del game_rooms[room_id]
             else:
-                emit('player_left', {'player_count': len(game_rooms[room_id]['players'])}, room=room_id)
+                emit('player_left', {'player_count': len(game_rooms[room_id]['players'])}, to=room_id, broadcast=True)
 
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=5000)
+    socketio.run(app, host='0.0.0.0', port=5000, log_output=True)
