@@ -38,6 +38,7 @@ class PuzzleGame {
             this.startGame();
         };
         this.frameImage.src = `/static/images/${this.selectedFrame}.svg`;
+    }
 
     // Helper method to determine if an edge should have a knob or indent
     getEdgeType(row, col, edge) {
@@ -238,30 +239,24 @@ class PuzzleGame {
     update() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Draw puzzle frame
-        if (this.selectedFrame) {
+        // Draw puzzle frame and background
+        if (this.selectedFrame && this.frameImage) {
+            // First draw frame background
+            this.ctx.fillStyle = '#1a1a1a';
+            this.ctx.fillRect(0, 0, this.canvas.width/2, this.canvas.height/2);
+            
+            // Draw the frame image
+            this.ctx.drawImage(
+                this.frameImage,
+                0, 0,
+                this.canvas.width/2,
+                this.canvas.height/2
+            );
+            
+            // Draw frame border
             this.ctx.lineWidth = 3;
             this.ctx.strokeStyle = '#888';
             this.ctx.strokeRect(0, 0, this.canvas.width/2, this.canvas.height/2);
-            
-            // Draw the selected frame image
-            this.ctx.drawImage(this.frameImage, 0, 0, this.canvas.width/2, this.canvas.height/2);
-            
-            // Draw grid lines
-            this.ctx.lineWidth = 1;
-            for(let i = 1; i < 4; i++) {
-                // Vertical lines
-                this.ctx.beginPath();
-                this.ctx.moveTo((this.canvas.width/2/4) * i, 0);
-                this.ctx.lineTo((this.canvas.width/2/4) * i, this.canvas.height/2);
-                this.ctx.stroke();
-                
-                // Horizontal lines
-                this.ctx.beginPath();
-                this.ctx.moveTo(0, (this.canvas.height/2/4) * i);
-                this.ctx.lineTo(this.canvas.width/2, (this.canvas.height/2/4) * i);
-                this.ctx.stroke();
-            }
         }
         
         // Reset line width for pieces
