@@ -260,6 +260,13 @@ class PuzzleGame {
             progressBar.style.width = `${progress}%`;
             progressBar.setAttribute('aria-valuenow', progress);
         }
+        
+        // Update batch progress bar
+        const batchProgress = ((this.currentBatch - 1) / this.batches.length) * 100;
+        const nextBatchBar = document.querySelector('#batchProgress');
+        if (nextBatchBar) {
+            nextBatchBar.style.width = `${batchProgress}%`;
+        }
     }
 }
 
