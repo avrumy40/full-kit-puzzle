@@ -193,34 +193,14 @@ const socket = io();
         
         const modal = new bootstrap.Modal(document.getElementById('gameOverModal'));
         modal.show();
-    setupMultiplayer() {
-        // Listen for progress updates from other players
-        socket.on('progress_update', (data) => {
-            if (!document.getElementById(`player-${data.player_id}`)) {
-                const progressDiv = document.createElement('div');
-                progressDiv.id = `player-${data.player_id}`;
-                progressDiv.className = 'mb-3';
-                progressDiv.innerHTML = `
-                    <label>Player Progress:</label>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 0%"></div>
-                    </div>
-                `;
-                document.querySelector('.card-body').appendChild(progressDiv);
-            }
-            
-            const progressBar = document.querySelector(`#player-${data.player_id} .progress-bar`);
-            progressBar.style.width = `${data.progress}%`;
-        });
-    }
-
     updateProgress() {
         const placedPieces = this.pieces.filter(p => p.placed).length;
         const progress = (placedPieces / this.totalPieces) * 100;
-        socket.emit('update_progress', {
-            room_id: currentRoom,
-            progress: progress
-        });
+        const progressBar = document.querySelector('#batchProgress');
+        if (progressBar) {
+            progressBar.style.width = `${progress}%`;
+            progressBar.setAttribute('aria-valuenow', progress);
+        }
     }
     }
 }

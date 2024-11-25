@@ -22,84 +22,8 @@
                         </ul>
                     </div>
                     <div class="d-grid gap-2">
-                        <button class="btn btn-primary" onclick="createGame()">Create New Game</button>
-                        <div class="input-group mb-3">
-                            <input type="text" id="roomId" class="form-control" placeholder="Enter Room ID">
-                            <button class="btn btn-outline-secondary" onclick="joinGame()">Join Game</button>
-                        </div>
+                        <a href="/game" class="btn btn-primary">Start Game</a>
                     </div>
-
-                    <!-- Waiting Room Modal -->
-                    <div class="modal fade" id="waitingRoomModal" tabindex="-1">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Waiting Room</h5>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Room ID: <span id="roomIdDisplay"></span></p>
-                                    <p>Players: <span id="playerCount">1</span></p>
-                                    <p>Share this Room ID with other players to join!</p>
-                                    <div class="text-center mt-3">
-                                        <button id="readyButton" class="btn btn-success" onclick="playerReady()">Ready</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
-                    <script>
-                        const socket = io({
-                            transports: ['websocket'],
-                            upgrade: false
-                        });
-                        let currentRoom = null;
-                        const waitingRoomModal = new bootstrap.Modal(document.getElementById('waitingRoomModal'));
-                        
-                        function createGame() {
-                            socket.emit('create_game');
-                        }
-                        
-                        function joinGame() {
-                            const roomId = document.getElementById('roomId').value;
-                            if (roomId) {
-                                socket.emit('join_game', { room_id: roomId });
-                            }
-                        }
-                        
-                        function playerReady() {
-                            socket.emit('player_ready', { room_id: currentRoom });
-                            document.getElementById('readyButton').disabled = true;
-                        }
-                        
-                        socket.on('game_created', (data) => {
-                            currentRoom = data.room_id;
-                            document.getElementById('roomIdDisplay').textContent = currentRoom;
-                            waitingRoomModal.show();
-                        });
-                        
-                        socket.on('player_joined', (data) => {
-                            document.getElementById('playerCount').textContent = data.player_count;
-                        });
-                        
-                        socket.on('join_error', (data) => {
-                            alert(data.message);
-                        });
-                        
-                        socket.on('game_start', () => {
-                            window.location.href = '/game';
-                        });
-
-                        socket.on('connect_error', (error) => {
-                            console.error('Connection Error:', error);
-                        });
-
-                        socket.on('error', (error) => {
-                            console.error('Socket Error:', error);
-                        });
-                    </script>
                 </div>
             </div>
         </div>
