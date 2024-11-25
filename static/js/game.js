@@ -1,5 +1,4 @@
 class PuzzleGame {
-
     constructor() {
         this.canvas = document.getElementById('puzzleCanvas');
         this.ctx = this.canvas.getContext('2d');
@@ -12,10 +11,76 @@ class PuzzleGame {
         this.draggedPiece = null;
         this.batches = [0.3, 0.3, 0.4]; // 30%, 30%, 40% of pieces
         this.currentBatch = 0;
+        this.knobSize = 20; // Size of the jigsaw knobs
         
         this.initializeCanvas();
         this.setupEventListeners();
         this.startGame();
+    }
+
+    // Helper method to determine if an edge should have a knob or indent
+    getEdgeType(row, col, edge) {
+        const pattern = {
+            top: row % 2 === 0,
+            right: col % 2 === 0,
+            bottom: row % 2 === 1,
+            left: col % 2 === 1
+        };
+        return pattern[edge];
+    }
+
+    // Draw a single edge with optional knob/indent
+    drawPieceEdge(x, y, width, height, hasKnob) {
+        const kSize = this.knobSize;
+        
+        if (width !== 0) { // Horizontal edge
+            const midPoint = x + width / 2;
+            const ctrl1 = midPoint - kSize;
+            const ctrl2 = midPoint + kSize;
+            
+            if (hasKnob) {
+                this.ctx.quadraticCurveTo(ctrl1, y, midPoint, y + (height > 0 ? -kSize : kSize));
+                this.ctx.quadraticCurveTo(ctrl2, y, x + width, y);
+            } else {
+                this.ctx.quadraticCurveTo(ctrl1, y, midPoint, y + (height > 0 ? kSize : -kSize));
+                this.ctx.quadraticCurveTo(ctrl2, y, x + width, y);
+            }
+        } else { // Vertical edge
+            const midPoint = y + height / 2;
+            const ctrl1 = midPoint - kSize;
+            const ctrl2 = midPoint + kSize;
+            
+            if (hasKnob) {
+                this.ctx.quadraticCurveTo(x, ctrl1, x + (width > 0 ? -kSize : kSize), midPoint);
+                this.ctx.quadraticCurveTo(x, ctrl2, x, y + height);
+            } else {
+                this.ctx.quadraticCurveTo(x, ctrl1, x + (width > 0 ? kSize : -kSize), midPoint);
+                this.ctx.quadraticCurveTo(x, ctrl2, x, y + height);
+            }
+        }
+    }
+
+    drawPiece(piece) {
+        this.ctx.beginPath();
+        this.ctx.moveTo(piece.x, piece.y);
+        
+        // Draw top edge
+        this.drawPieceEdge(piece.x, piece.y, piece.width, 0, piece.topEdge);
+        
+        // Draw right edge
+        this.drawPieceEdge(piece.x + piece.width, piece.y, 0, piece.height, piece.rightEdge);
+        
+        // Draw bottom edge
+        this.drawPieceEdge(piece.x + piece.width, piece.y + piece.height, -piece.width, 0, piece.bottomEdge);
+        
+        // Draw left edge
+        this.drawPieceEdge(piece.x, piece.y + piece.height, 0, -piece.height, piece.leftEdge);
+        
+        this.ctx.closePath();
+        this.ctx.fillStyle = piece.placed ? '#4CAF50' : '#2196F3';
+        this.ctx.fill();
+        this.ctx.strokeStyle = '#666';
+        this.ctx.stroke();
     }
 
     initializeCanvas() {
@@ -25,17 +90,22 @@ class PuzzleGame {
         this.pieceHeight = this.canvas.height / 4;
         
         // Create puzzle pieces
-        for(let y = 0; y < 4; y++) {
-            for(let x = 0; x < 4; x++) {
+        for(let row = 0; row < 4; row++) {
+            for(let col = 0; col < 4; col++) {
                 this.pieces.push({
                     x: this.canvas.width - this.pieceWidth - 10,
                     y: 10,
-                    correctX: x * this.pieceWidth,
-                    correctY: y * this.pieceHeight,
+                    correctX: col * this.pieceWidth,
+                    correctY: row * this.pieceHeight,
                     width: this.pieceWidth,
                     height: this.pieceHeight,
                     available: false,
-                    placed: false
+                    placed: false,
+                    // Add edge type information
+                    topEdge: this.getEdgeType(row, col, 'top'),
+                    rightEdge: this.getEdgeType(row, col, 'right'),
+                    bottomEdge: this.getEdgeType(row, col, 'bottom'),
+                    leftEdge: this.getEdgeType(row, col, 'left')
                 });
             }
         }
@@ -144,26 +214,14 @@ class PuzzleGame {
     update() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Draw puzzle grid
+        // Draw puzzle grid outlines
         this.ctx.strokeStyle = '#666';
-        for(let i = 1; i < 4; i++) {
-            this.ctx.beginPath();
-            this.ctx.moveTo(i * this.pieceWidth, 0);
-            this.ctx.lineTo(i * this.pieceWidth, this.canvas.height);
-            this.ctx.stroke();
-            
-            this.ctx.beginPath();
-            this.ctx.moveTo(0, i * this.pieceHeight);
-            this.ctx.lineTo(this.canvas.width, i * this.pieceHeight);
-            this.ctx.stroke();
-        }
+        this.ctx.strokeRect(0, 0, this.canvas.width, this.canvas.height);
         
         // Draw pieces
         for(let piece of this.pieces) {
             if (!piece.available) continue;
-            
-            this.ctx.fillStyle = piece.placed ? '#4CAF50' : '#2196F3';
-            this.ctx.fillRect(piece.x, piece.y, piece.width - 2, piece.height - 2);
+            this.drawPiece(piece);
         }
     }
 
