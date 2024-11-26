@@ -122,9 +122,17 @@ class PuzzleGame {
     }
 
     releaseBatch() {
-        if (this.currentBatch >= this.batches.length) return;
+        if (this.currentBatch >= this.batches.length) {
+            // Release any remaining pieces in the last batch
+            this.pieces.forEach(piece => {
+                if (!piece.available) {
+                    piece.available = true;
+                }
+            });
+            return;
+        }
         
-        const piecesToRelease = Math.floor(this.totalPieces * this.batches[this.currentBatch]);
+        const piecesToRelease = Math.ceil(this.totalPieces * this.batches[this.currentBatch]);
         let released = 0;
         
         for(let piece of this.pieces) {
