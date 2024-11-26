@@ -32,13 +32,23 @@ class PuzzleGame {
 
     loadPuzzleImage() {
         this.puzzleImage = new Image();
-        this.puzzleImage.onload = () => {
+        this.frameMask = new Image();
+        
+        Promise.all([
+            new Promise(resolve => {
+                this.puzzleImage.onload = resolve;
+                this.puzzleImage.src = `/static/images/${this.selectedFrame}_puzzle.png`;
+            }),
+            new Promise(resolve => {
+                this.frameMask.onload = resolve;
+                this.frameMask.src = `/static/images/${this.selectedFrame}.svg`;
+            })
+        ]).then(() => {
             this.pieces = [];
             this.initializeCanvas();
             this.setupEventListeners();
             this.startGame();
-        };
-        this.puzzleImage.src = `/static/images/${this.selectedFrame}_puzzle.png`;
+        });
     }
 
     // Helper method to determine if an edge should have a knob or indent
@@ -93,30 +103,37 @@ class PuzzleGame {
 
     drawPiece(piece) {
         this.ctx.save();
+        
+        // Create mask path for the piece
         this.ctx.beginPath();
-        
-        // Create piece path with jigsaw edges
-        this.ctx.moveTo(piece.x, piece.y);
-        this.drawPieceEdge(piece.x, piece.y, piece.width, 0, piece.topEdge);
-        this.drawPieceEdge(piece.x + piece.width, piece.y, 0, piece.height, piece.rightEdge);
-        this.drawPieceEdge(piece.x + piece.width, piece.y + piece.height, -piece.width, 0, piece.bottomEdge);
-        this.drawPieceEdge(piece.x, piece.y + piece.height, 0, -piece.height, piece.leftEdge);
-        
-        this.ctx.closePath();
+        if (this.selectedFrame === 'face') {
+            // Circular mask for face
+            const centerX = piece.correctX + piece.width/2;
+            const centerY = piece.correctY + piece.height/2;
+            this.ctx.arc(centerX, centerY, piece.width/2, 0, Math.PI * 2);
+        } else if (this.selectedFrame === 'animal') {
+            // Cat head shape mask
+            this.ctx.ellipse(
+                piece.correctX + piece.width/2,
+                piece.correctY + piece.height/2,
+                piece.width/2,
+                piece.height/2,
+                0, 0, Math.PI * 2
+            );
+        } else {
+            // Rectangular mask for furniture
+            this.ctx.rect(piece.correctX, piece.correctY, piece.width, piece.height);
+        }
         this.ctx.clip();
         
-        // Draw the corresponding portion of the frame image
-        if (this.frameImage) {
-            const frameWidth = this.canvas.width/2;
-            const frameHeight = this.canvas.height/2;
-            this.ctx.drawImage(
-                this.frameImage,
-                piece.correctX, piece.correctY,  // Source position
-                piece.width, piece.height,       // Source dimensions
-                piece.x, piece.y,               // Destination position
-                piece.width, piece.height       // Destination dimensions
-            );
-        }
+        // Draw the puzzle piece content
+        this.ctx.drawImage(
+            this.puzzleImage,
+            piece.correctX, piece.correctY,
+            piece.width, piece.height,
+            piece.x, piece.y,
+            piece.width, piece.height
+        );
         
         // Draw piece border
         this.ctx.strokeStyle = '#666';
