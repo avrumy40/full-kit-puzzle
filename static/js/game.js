@@ -25,7 +25,7 @@ class PuzzleGame {
                 buttons.forEach(b => b.classList.remove('active'));
                 button.classList.add('active');
                 this.selectedFrame = button.dataset.frame;
-                this.loadFrame();
+                this.loadPuzzleImage();  // Changed from this.loadFrame()
             });
         });
     }
