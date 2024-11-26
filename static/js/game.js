@@ -30,14 +30,15 @@ class PuzzleGame {
         });
     }
 
-    loadFrame() {
-        this.frameImage.onload = () => {
+    loadPuzzleImage() {
+        this.puzzleImage = new Image();
+        this.puzzleImage.onload = () => {
             this.pieces = [];
             this.initializeCanvas();
             this.setupEventListeners();
             this.startGame();
         };
-        this.frameImage.src = `/static/images/${this.selectedFrame}.svg`;
+        this.puzzleImage.src = `/static/images/${this.selectedFrame}_puzzle.png`;
     }
 
     // Helper method to determine if an edge should have a knob or indent
