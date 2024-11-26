@@ -4,9 +4,9 @@ class PuzzleGame {
         this.ctx = this.canvas.getContext('2d');
         this.pieces = [];
         this.totalPieces = 16; // 4x4 puzzle
-        this.timeRemaining = 300; // 5 minutes
+        this.timeRemaining = 150; // 2:30 minutes
         this.moves = 0;
-        this.batchInterval = 30; // seconds
+        this.batchInterval = 15; // seconds
         this.nextBatchTime = this.batchInterval;
         this.draggedPiece = null;
         this.batches = [0.3, 0.3, 0.4]; // 30%, 30%, 40% of pieces
