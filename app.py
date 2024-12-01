@@ -2,7 +2,8 @@ import os
 from flask import Flask, render_template
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("FLASK_SECRET_KEY") or "dev_key_123"
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev_key_123")
+app.debug = False
 
 @app.route('/')
 def index():
