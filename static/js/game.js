@@ -53,22 +53,21 @@ class PuzzleGame {
         this.canvas.width = this.canvas.offsetWidth;
         this.canvas.height = this.canvas.offsetHeight;
         
-        const frameWidth = this.canvas.width/2;
-        const frameHeight = this.canvas.height/2;
+        const frameWidth = (this.canvas.width * 2) / 3;  // Changed from width/2 to (width * 2)/3
+        const frameHeight = (this.canvas.height * 2) / 3; // Changed from height/2 to (height * 2)/3
         this.pieceWidth = frameWidth / 4;
         this.pieceHeight = frameHeight / 4;
         
-        // Create puzzle pieces
+        // Update staging area positions
         for(let row = 0; row < 4; row++) {
             for(let col = 0; col < 4; col++) {
-                // Position pieces in staging area (right side)
                 const startX = frameWidth + 20 + (col % 2) * this.pieceWidth;
                 const startY = 20 + row * this.pieceHeight;
                 
                 this.pieces.push({
-                    x: startX,  // Initial position in staging area
+                    x: startX,
                     y: startY,
-                    correctX: col * this.pieceWidth,  // Target position in frame
+                    correctX: col * this.pieceWidth,
                     correctY: row * this.pieceHeight,
                     width: this.pieceWidth,
                     height: this.pieceHeight,
@@ -80,7 +79,6 @@ class PuzzleGame {
             }
         }
         
-        // Shuffle available pieces
         this.pieces.sort(() => Math.random() - 0.5);
     }
 
@@ -216,13 +214,13 @@ class PuzzleGame {
         
         // Draw puzzle frame area
         this.ctx.fillStyle = '#1a1a1a';
-        this.ctx.fillRect(0, 0, this.canvas.width/2, this.canvas.height/2);
+        this.ctx.fillRect(0, 0, (this.canvas.width * 2) / 3, (this.canvas.height * 2) / 3);
         
         if (this.selectedFrame && this.frameMask) {
             // Draw the frame outline
             this.ctx.strokeStyle = '#666';
             this.ctx.lineWidth = 2;
-            this.ctx.strokeRect(0, 0, this.canvas.width/2, this.canvas.height/2);
+            this.ctx.strokeRect(0, 0, (this.canvas.width * 2) / 3, (this.canvas.height * 2) / 3);
         }
         
         // Draw pieces
