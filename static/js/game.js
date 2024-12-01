@@ -53,16 +53,16 @@ class PuzzleGame {
         this.canvas.width = this.canvas.offsetWidth;
         this.canvas.height = this.canvas.offsetHeight;
         
-        const frameWidth = (this.canvas.width * 2) / 3;  // Changed from width/2 to (width * 2)/3
-        const frameHeight = (this.canvas.height * 2) / 3; // Changed from height/2 to (height * 2)/3
+        const frameWidth = this.canvas.width * 0.8;  // 80% of canvas width
+        const frameHeight = this.canvas.height * 0.8; // 80% of canvas height
         this.pieceWidth = frameWidth / 4;
         this.pieceHeight = frameHeight / 4;
         
-        // Update staging area positions
+        // Update staging area positions to be on the right side
         for(let row = 0; row < 4; row++) {
             for(let col = 0; col < 4; col++) {
-                const startX = frameWidth + 20 + (col % 2) * this.pieceWidth;
-                const startY = 20 + row * this.pieceHeight;
+                const startX = frameWidth + 10 + (col % 2) * (this.pieceWidth * 0.8);
+                const startY = 10 + row * (this.pieceHeight * 0.8);
                 
                 this.pieces.push({
                     x: startX,
@@ -214,13 +214,13 @@ class PuzzleGame {
         
         // Draw puzzle frame area
         this.ctx.fillStyle = '#1a1a1a';
-        this.ctx.fillRect(0, 0, (this.canvas.width * 2) / 3, (this.canvas.height * 2) / 3);
+        this.ctx.fillRect(0, 0, this.canvas.width * 0.8, this.canvas.height * 0.8);
         
         if (this.selectedFrame && this.frameMask) {
             // Draw the frame outline
             this.ctx.strokeStyle = '#666';
             this.ctx.lineWidth = 2;
-            this.ctx.strokeRect(0, 0, (this.canvas.width * 2) / 3, (this.canvas.height * 2) / 3);
+            this.ctx.strokeRect(0, 0, this.canvas.width * 0.8, this.canvas.height * 0.8);
         }
         
         // Draw pieces
